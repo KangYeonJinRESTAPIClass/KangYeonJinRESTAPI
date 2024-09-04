@@ -6,6 +6,9 @@ import com.ohgiraffers.mission.domain.entity.Post;
 import com.ohgiraffers.mission.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -112,5 +115,29 @@ public class PostController {
 
     }
 
+    //삭제
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "정보삭제성공"),
+            @ApiResponse(responseCode = "400", description = "잘못 입력된 파라미터")
+    })
+    @DeleteMapping("/posts/{postNo}")
+    public ResponseEntity<?> removeUser(@PathVariable int postNo) {
 
+//        List<PostDTO> posts = postService.getAllPosts();
+//
+//        PostDTO foundUser = posts.stream().filter(post -> post.getPostId() == postNo).toList().get(0);
+//        posts.remove(foundUser);
+//
+//        return ResponseEntity.noContent().build();
+//    }
+
+        try {
+            // 게시글 삭제 서비스 메서드 호출
+            postService.deletePost(postNo);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            // 게시글이 없는 경우 404 상태 반환
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

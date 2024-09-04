@@ -71,4 +71,14 @@ public class PostService {
         Optional<Post> postOptional = postRepository.findById(postNo);
         return postOptional.map(this::convertToDTO);
     }
+
+    public void deletePost(int postNo) {
+
+        if (postRepository.existsById(postNo)) {
+            postRepository.deleteById(postNo);
+        } else {
+            throw new EntityNotFoundException("Post not found with ID: " + postNo);
+        }
+
+    }
 }
