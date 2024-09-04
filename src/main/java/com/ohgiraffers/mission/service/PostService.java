@@ -39,14 +39,12 @@ public class PostService {
         postDTO.setTitle(post.getTitle());
         postDTO.setContent(post.getContent());
         return postDTO;
-
     }
 
-
-
-
-
-
-
-
+//    public Post updatePost(int id, Post modifyInfo) {
+//
+//
+//
+//        return Post;
+//    }
 }
