@@ -5,20 +5,21 @@ import com.ohgiraffers.mission.domain.dto.PostDTO;
 import com.ohgiraffers.mission.domain.entity.Post;
 import com.ohgiraffers.mission.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 //@Tag(name="Spring boot Swagger 연동 API(USER 기능)")
 @Slf4j
@@ -67,14 +68,49 @@ public class PostController {
         return new ResponseEntity<>(responseMessage, headers, HttpStatus.OK);
     }
 
-    //등록
+    @Operation(summary = "회원번호로 회원 조회", description = "회원번호를 통회 회원을 조회한다",
+            parameters = {
+                    @Parameter(
+                            name="postNo",
+                            description = "사용자 화면에서 넘어오는 post의 pk"
+                    )
+            })
+    @GetMapping("/posts/{postNo}")
+    public ResponseEntity<ResponseMessage> findUserByNo(@PathVariable int postNo) {
 
-    //전체조회
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(
+                new MediaType(
+                        "application",
+                        "json",
+                        Charset.forName("UTF-8")
+                )
+        );
 
-    //단일조회
+        List<PostDTO> posts = postService.getAllPosts();
+
+        PostDTO foundPost = posts.stream()
+                .filter(post -> post.getPostId() == postNo).toList().get(0);
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("post", foundPost);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "조회성공", responseMap));
+    }
 
     //수정
+    @PutMapping("/posts/{postNo}")
+    public ResponseEntity<?> modifyPost(@PathVariable int postNo, @RequestBody PostDTO modifyInfo){
 
-    //삭제
+        // 게시글 수정 서비스 메서드 호출
+        postService.updatePost(postNo, modifyInfo);
+
+        // 수정 후 새로운 리소스 위치를 나타내는 URI 반환
+        return ResponseEntity.noContent().build();
+
+    }
+
 
 }
