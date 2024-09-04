@@ -1,0 +1,47 @@
+#spring.application.name=mission
+
+#????????
+
+#springdoc:
+#  packages-to-scan: com.ohgiraffers.restapi
+
+springdoc:
+  packages-to-scan: com.ohgiraffers.mission
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/post_db?serverTimezone=Asia/Seoul
+    username: ohgiraffers
+    password: ohgiraffers
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/post_db
+#    username: ohgiraffers
+#    password: ohgiraffers
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#logging:
+#  level:
+#    root: info
